@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome, {{ user.username }}</h1>
+
+    <!-- Button to create a new post -->
+    <a href="{% url 'create_post' %}">Create New Post</a>
+    <hr>
+
+    <!-- Loop through and display posts -->
+    {% for post in posts %}
+    <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
+        <h2><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></h2>
+        <p>{{ post.content|truncatechars:100 }}</p>
+        <p>
+            Author: {{ post.author.username }} | 
+            Created: {{ post.created_at|date:"M d, Y H:i" }}
+        </p>
+
+        <div>
+            <p id="like-count-{{ post.id }}">Likes: {{ post.likes.count }}</p>
+            <button onclick="likePost('{{ post.id }}')">Like</button>
+        </div>
+        
+    </div>
+    {% empty %}
+    <p>No posts available yet. Create one!</p>
+    {% endfor %}
+
+    <script>
+        function likePost(postId) {
+    fetch(`/post/${postId}/like/`)
+        .then(response => response.json())
+        .then(data => {
+            // Find the like count element for the specific post
+            const likeCountElement = document.querySelector(`#like-count-${postId}`);
+            if (likeCountElement) {
+                likeCountElement.textContent = `Likes: ${data.likes_count}`; // Update like count dynamically
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+}
+
+    </script>
+</body>
+</html>
