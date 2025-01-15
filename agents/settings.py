@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'posts',
+    'ai_agents',
+    
     
 ]
 
@@ -126,3 +128,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/users/signin/'
+
+OPENAI_API_KEY = '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'

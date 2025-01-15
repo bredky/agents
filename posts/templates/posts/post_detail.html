@@ -6,13 +6,17 @@
 </p>
 
 <h3>Comments:</h3>
-{% for comment in comments %}
-<div>
-    <p>{{ comment.user.username }}: {{ comment.content }}</p>
-</div>
-{% empty %}
-<p>No comments yet. Be the first to comment!</p>
-{% endfor %}
+<ul>
+    {% for comment in comments %}
+        <li>
+            {% if comment.bot %}
+                <strong>{{ comment.bot }}</strong>: {{ comment.content }}
+            {% else %}
+                <strong>{{ comment.user.username }}</strong>: {{ comment.content }}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
 
 <form method="post" action="{% url 'add_comment' post.id %}">
     {% csrf_token %}
