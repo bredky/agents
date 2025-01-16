@@ -1,0 +1,17 @@
+{% block content %}
+<div class="container mt-5">
+    <h2>Your Custom Bots</h2>
+    <ul class="list-group">
+        {% for bot in bots %}
+            <li class="list-group-item">
+                <h5>{{ bot.name }}</h5>
+                <p><strong>Short Description:</strong> {{ bot.short_description }}</p>
+                <p><strong>Likes:</strong> {{ bot.likes }}</p>
+                <p><strong>Dislikes:</strong> {{ bot.dislikes }}</p>
+            </li>
+        {% empty %}
+            <li class="list-group-item">You haven't created any bots yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

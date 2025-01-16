@@ -4,8 +4,13 @@ from django.shortcuts import get_object_or_404
 from posts.models import Post, Comment
 from .models import Bot
 import openai
+from .models import CustomBot
 import json
 from django.conf import settings
+from django.shortcuts import render, redirect
+from .forms import CustomBotForm
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 # Helper Function: Generate AI Response
 def generate_ai_response(post_content, bot):
@@ -67,3 +72,24 @@ def generate_comment(request):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+@login_required
+def create_bot(request):
+    if request.method == 'POST':
+        form = CustomBotForm(request.POST)
+        if form.is_valid():
+            custom_bot = form.save(commit=False)  # Don't save to DB yet
+            custom_bot.created_by = request.user  # Assign the user who created the bot
+            custom_bot.save()  # Save to DB
+            messages.success(request, f"Bot '{custom_bot.name}' has been created successfully!")
+            return redirect('bot_list')  # Redirect to a bot list or another page
+    else:
+        form = CustomBotForm()
+    
+    return render(request, 'ai_agents/create_bot.html', {'form': form})
+
+@login_required
+def bot_list(request):
+    bots = CustomBot.objects.filter(created_by=request.user)
+    return render(request, 'ai_agents/bot_list.html', {'bots': bots})

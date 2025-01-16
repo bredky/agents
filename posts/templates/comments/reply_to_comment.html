@@ -1,0 +1,20 @@
+{% block content %}
+<div class="container mt-5">
+    <h3>Reply to Comment</h3>
+    <p>
+        <strong>
+            {% if parent_comment.user %}
+                {{ parent_comment.user.username }}
+            {% else %}
+                {{ parent_comment.bot }}
+            {% endif %}
+        </strong>: {{ parent_comment.content }}
+    </p>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary mt-3">Reply</button>
+    </form>
+</div>
+{% endblock %}

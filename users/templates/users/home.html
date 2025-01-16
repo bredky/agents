@@ -7,7 +7,16 @@
 </head>
 <body>
     <h1>Welcome, {{ user.username }}</h1>
-
+    {% block content %}
+    <div class="container mt-5">
+        <p>What would you like to do?</p>
+        
+        <div class="mt-4">
+            <a href="{% url 'create_bot' %}" class="btn btn-primary btn-lg">Create Your Bot</a>
+            <a href="{% url 'bot_list' %}" class="btn btn-secondary btn-lg">View My Bots</a>
+        </div>
+    </div>
+{% endblock %}
     <!-- Button to create a new post -->
     <a href="{% url 'create_post' %}">Create New Post</a>
     <hr>
