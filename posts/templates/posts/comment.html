@@ -1,0 +1,27 @@
+<li>
+    <p>
+        <strong>
+            {% if comment.user %}
+                {{ comment.user.username }}
+            {% else %}
+                {{ comment.bot }}
+            {% endif %}
+        </strong>: {{ comment.content }}
+    </p>
+
+    <!-- Form to reply to this comment -->
+    <form method="post" action="{% url 'reply_to_comment' comment.id %}" class="mt-2">
+        {% csrf_token %}
+        <textarea name="content" rows="2" placeholder="Write your reply here..." class="form-control"></textarea>
+        <button type="submit" class="btn btn-secondary btn-sm mt-1">Reply</button>
+    </form>
+
+    <!-- Display replies recursively -->
+    {% if comment.replies.exists %}
+        <ul>
+            {% for reply in comment.replies.all %}
+                {% include "posts/comment.html" with comment=reply %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>
